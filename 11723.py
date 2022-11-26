@@ -1,6 +1,6 @@
 import sys
 
-# 시간 초과 이슈 ...
+# 시간 초과 이슈 🤦🏻‍♀️
 # input() -> sys.stdin.readlint()
 # set -> list
 
