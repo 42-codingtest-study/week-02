@@ -1,35 +1,30 @@
-#include <iostream>//틀렸음///
+#include <iostream>
 using namespace std;
 
-int n,num,vote=0,vote_max,idx=1;
-int student[101]= {0,},order[101]={0,};
+int n,idx_del,vote_max,num;
+int vote=0,idx=1;
+pair<int,int> student[101]; // first가 득표수 seconed가 등록순서
 
-int find_min(void)// 최소 추천수 탐색
+int student_del(void)//가장 득표수가 적고 오래된 인덱스를 탐색
 {
-	int student_min = 1001;
-	for(int i=1;i<101;i++)
-	{
-		if(student[i])
-			student_min = min(student_min,student[i]);
-	}
-	return (student_min);
-}
+	int tmp,vote_min=1001;
 
-int find_oldest(void)
-{
-	int idx_min=101,student_min;
-	student_min = find_min();
-	for(int i=1;i<101;i++)
+	for(int i=1;i<=100;i++)
 	{
-		if(student[i] == student_min)
-			idx_min = min(idx_min,order[i]);
+		if(student[i].first)
+		{
+			if(vote_min > student[i].first)
+			{
+				vote_min = student[i].first;
+				tmp = i;
+			}
+			else if(vote_min == student[i].first)
+			{
+				tmp = student[tmp].second > student[i].second ? i : tmp;
+			}
+		}
 	}
-	for(int i=1;i<101;i++)
-	{
-		if(student[i] == student_min && order[i] == idx_min)
-			return (i);
-	}
-	return (0);
+	return (tmp);
 }
 
 int main()
@@ -39,30 +34,30 @@ int main()
 
 	cin >> n;
 	cin >> vote_max;
-	while (n>0 && vote < vote_max) // 꽉차기 전까지
+	while(vote_max--)
 	{
 		cin >> num;
-		if(!student[num])
+		if(n)// 액자가 존재할떄
 		{
-			n--;
-			order[num] = idx++;
+			if(!student[num].first)//새로운 후보
+			{
+				n--;
+				student[num].second = idx++;			
+			}
+			student[num].first++;
 		}
-		student[num]++;
-		vote++;
-	}
-	while(vote < vote_max)
-	{
-		cin >> num;
-		if(!student[num])// 최소투표자를 찾아서 갱신 해주어야 한다.
+		else// 액자가 꽉차면 새로운 후보가 들어오면 항상 갱신해주어야 한다.
 		{
-			n = find_oldest();
-			student[n] = 0;
-			order[n] = 0;
-			order[num] = idx++;
+			if(!student[num].first)
+			{
+				idx_del = student_del();
+				student[idx_del].first = 0;
+				student[idx_del].second = 0;
+				student[num].second = idx++;				
+			}
+			student[num].first++;
 		}
-		student[num]++;
-		vote++;
 	}
-	for(int i=0;i<101;i++)
-		if(student[i]!=0) cout << i << ' ';
+	for(int i=1;i<=100;i++)
+		if(student[i].first!=0) cout << i << " ";
 }
