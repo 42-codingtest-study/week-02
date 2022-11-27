@@ -9,24 +9,33 @@
 
 # https://www.acmicpc.net/problem/11723
 
-S = []
-for _ in range(int(input())) :
-    lst = list(input().split())
-    if (lst[0] == 'add') :
-        S.append(lst[1])
-    elif (lst[0] == 'remove') :
-        S.remove(lst[1])
-    elif (lst[0] == 'check') :
-        if (lst[1] in S) :
-            print(1)
-        else :
-            print(0)
-    elif (lst[0] == 'toggle') :
-        if (lst[1] in S) :
-            S.remove(lst[1])
-        else :
-            S.append(lst[1])
-    elif (lst[0] == 'all') :
-        S = [str(i) for i in range(1, 21)]
-    elif (lst[0] == 'empty') :
-        S = []
+import sys
+
+input = sys.stdin.readline
+S = set()   #list 쓰면 시간 초과
+T = int(input())
+for i in range(T):
+    tmp = input().split()
+    if len(tmp) == 1:
+        if tmp[0] == 'all':
+            S = set([x for x in range(1, 21)])
+        else:
+            S = set()
+
+    else:
+        cmd, x = tmp[0], int(tmp[1])
+        if cmd == 'add':
+            S.add(x)
+        elif cmd == 'check':
+            if x in S:
+                print(1)
+            else:
+                print(0)
+        elif cmd == 'remove':
+            if x in S:
+                S.discard(x)    #요소 삭제
+        elif cmd == 'toggle':
+            if x in S:
+                S.discard(x)
+            else:
+                S.add(x)
