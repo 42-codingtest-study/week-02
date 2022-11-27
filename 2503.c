@@ -4,5 +4,7 @@
 
 int	main()
 {
-	
+	int	n, i;
+
+	scanf("")
 }
